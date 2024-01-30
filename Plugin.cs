@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.InteropServices;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -35,22 +34,14 @@ namespace ResoniteFix
             ResoniteFixMod.TestLogger.LogInfo($"Plugin {ResoniteFixMod.PLUGIN_GUID} is loaded!");
 
             // Patching
-            var targetMethod = typeof(FrooxEngine.Engine).GetMethod("Initialize", BindingFlags.Instance | BindingFlags.Public);
-            var stateMachineAttr = targetMethod.GetCustomAttribute<AsyncStateMachineAttribute>();
-            var moveNextMethod = stateMachineAttr.StateMachineType.GetMethod("MoveNext", BindingFlags.NonPublic | BindingFlags.Instance);
+            var OSDescriptionMethod = typeof(RuntimeInformation).GetMethod("get_OSDescription");
+            var OSArchitectureMethod = typeof(RuntimeInformation).GetMethod("get_OSArchitecture");
 
-            var prefix = typeof(Patches.LinuxPatch).GetMethod(nameof(Patches.LinuxPatch.Prefix));
-            var prefixMethod = new HarmonyMethod(prefix);
+            var fake_OSDescriptionMethod = typeof(Patches.LinuxPatch).GetMethod(nameof(Patches.LinuxPatch.fake_OSDescription));
+            var fake_OSArchitectureMethod = typeof(Patches.LinuxPatch).GetMethod(nameof(Patches.LinuxPatch.fake_OSArchitecture));
 
-            var transpiler = typeof(Patches.LinuxPatch).GetMethod(nameof(Patches.LinuxPatch.Transpiler));
-            var transpilerMethod = new HarmonyMethod(transpiler);
-
-            ResoniteFixMod.TestLogger.LogInfo($"TargetMethod: {targetMethod}");
-            ResoniteFixMod.TestLogger.LogInfo($"MoveNext: {moveNextMethod}");
-            ResoniteFixMod.TestLogger.LogInfo($"Prefix: {prefix}");
-
-            FileLog.Log("Meow from Init uwu");
-            harmony.Patch(moveNextMethod, prefix: prefixMethod, transpiler: transpilerMethod); // Workyy >:3
+            harmony.Patch(OSDescriptionMethod, prefix: new HarmonyMethod(fake_OSDescriptionMethod));
+            harmony.Patch(OSArchitectureMethod, prefix: new HarmonyMethod(fake_OSArchitectureMethod));
         }
     }
 }
