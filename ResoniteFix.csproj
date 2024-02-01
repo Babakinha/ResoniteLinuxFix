@@ -15,34 +15,10 @@
     <ReferencePath>$(ReferencePath);$(ResonitePath)\BepinEx\plugins</ReferencePath>
   </PropertyGroup>
 
-  <!-- <ItemGroup> -->
-  <!--    <EmbeddedResource Include="Assets/AssetBundles/*"> -->
-  <!--   </EmbeddedResource> -->
-  <!-- </ItemGroup> -->
-
   <ItemGroup>
     <PackageReference Include="BepInEx.Analyzers" Version="1.*" PrivateAssets="all" />
     <PackageReference Include="BepInEx.Core" Version="5.*" />
     <PackageReference Include="UnityEngine.Modules" Version="2022.3.9" IncludeAssets="compile" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="FrooxEngine" Publicize="true">
-    <HintPath>$(ResonitePath)/Resonite_Data/Managed/FrooxEngine.dll</HintPath>
-      <Private>false</Private>
-    </Reference>
-    <!-- <Reference Include="Unity.TextMeshPro" Publicize="true"> -->
-    <!-- <HintPath>$(ResonitePath)/Resonite_Data/Managed/Unity.TextMeshPro.dll</HintPath> -->
-    <!--   <Private>false</Private> -->
-    <!-- </Reference> -->
-    <!-- <Reference Include="Unity.Netcode" Publicize="true"> -->
-    <!-- <HintPath>$(ResonitePath)/Resonite_Data/Managed/Unity.Netcode.Runtime.dll</HintPath> -->
-    <!--   <Private>false</Private> -->
-    <!-- </Reference> -->
-    <!-- <Reference Include="UnityEngine.UI" Publicize="true"> -->
-    <!-- <HintPath>$(ResonitePath)/Resonite_Data/Managed/UnityEngine.UI.dll</HintPath> -->
-    <!--   <Private>false</Private> -->
-    <!-- </Reference> -->
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">

@@ -33,15 +33,25 @@ namespace ResoniteFix
 
             ResoniteFixMod.TestLogger.LogInfo($"Plugin {ResoniteFixMod.PLUGIN_GUID} is loaded!");
 
-            // Patching
+            // Getting the Original Methods 
             var OSDescriptionMethod = typeof(RuntimeInformation).GetMethod("get_OSDescription");
             var OSArchitectureMethod = typeof(RuntimeInformation).GetMethod("get_OSArchitecture");
+            var IsOsPlatformMethod = typeof(RuntimeInformation).GetMethod(nameof(RuntimeInformation.IsOSPlatform));
 
+            var BrotliLibLoaderType = AccessTools.TypeByName("Brotli.NativeLibraryLoader");
+            var GetRuntimeDirMethod = AccessTools.Method(BrotliLibLoaderType, "GetPossibleRuntimeDirectories");
+
+            // Getting our Patches
             var fake_OSDescriptionMethod = typeof(Patches.LinuxPatch).GetMethod(nameof(Patches.LinuxPatch.fake_OSDescription));
             var fake_OSArchitectureMethod = typeof(Patches.LinuxPatch).GetMethod(nameof(Patches.LinuxPatch.fake_OSArchitecture));
+            var fake_IsOsPlatformMethod = typeof(Patches.LinuxPatch).GetMethod(nameof(Patches.LinuxPatch.fake_IsOsPlatform));
+            var add_RuntimeDirectoryMethod = typeof(Patches.LinuxPatch).GetMethod(nameof(Patches.LinuxPatch.add_RuntimeDirectory));
 
+            // Patching
             harmony.Patch(OSDescriptionMethod, prefix: new HarmonyMethod(fake_OSDescriptionMethod));
             harmony.Patch(OSArchitectureMethod, prefix: new HarmonyMethod(fake_OSArchitectureMethod));
+            harmony.Patch(IsOsPlatformMethod, prefix: new HarmonyMethod(fake_IsOsPlatformMethod));
+            harmony.Patch(GetRuntimeDirMethod, postfix: new HarmonyMethod(add_RuntimeDirectoryMethod));
         }
     }
 }
