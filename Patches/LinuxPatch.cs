@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using HarmonyLib;
+using static NativeGraphics.NET.OpenGL;
 
 namespace ResoniteFix.Patches
 {
@@ -33,6 +34,13 @@ namespace ResoniteFix.Patches
             __result[6] = (directoryName + "/../../Resonite_Data/Plugins");
 
             FileLog.Log($"End: {string.Join(" | ", __result)}");
+        }
+
+        public static void replace_badGlFormat(ref TextureFormat format) {
+            if(format == TextureFormat.GL_SRGB_ALPHA) {
+                format = TextureFormat.GL_RGBA;
+            }
+
         }
 
     }
