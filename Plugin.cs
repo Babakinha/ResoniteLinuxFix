@@ -12,7 +12,7 @@ namespace ResoniteFix
 
         private const string PLUGIN_GUID = "Babakinha.ResoniteFix";
         private const string PLUGIN_NAME = "ResoniteFix";
-        private const string PLUGIN_VERSION = "0.0.1";
+        private const string PLUGIN_VERSION = "0.0.2";
 
         private static ResoniteFixMod Instance;
         private readonly Harmony harmony = new Harmony(PLUGIN_GUID);
